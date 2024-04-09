@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to Image Store App</title>
+    <style>
+        /* CSS for the welcome headline */
+
+        h1 {
+            text-align: center;
+            font-size: 2em;
+            color: #333;
+            margin-top: 20px;
+            text-shadow: 2px 2px 4px #aaa;
+            animation: slideInDown 1s ease-in-out;
+        }
+
+        /* CSS for the image */
+        #uploadedImage {
+            display: block;
+            margin: 0 auto;
+            width: 300px;
+            height: auto;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        /* Keyframe animations */
+        @keyframes slideInDown {
+            0% {
+                transform: translateY(-100%);
+                opacity: 0;
+            }
+            100% {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body >
+    <!-- Welcome headline -->
+    <h1>Welcome to Image Store App</h1>
+
+    <h2>Upload Image</h2>
+    <form action="/upload/image" method="post" enctype="multipart/form-data">
+        <input type="file" name="image" accept="image/*">
+        <button type="submit">Upload</button>
+    </form>
+
+    <!-- Display uploaded image -->
+    <h2>Uploaded Image</h2>
+    <img id="uploadedImage" src="" alt="Uploaded Image">
+
+    <script>
+        // JavaScript code to update the image source
+        // Fetch the image URL from the server
+        fetch("/image/" + imageId)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Failed to fetch image");
+                }
+                return response.blob();
+            })
+            .then(imageBlob => {
+                // Create an object URL from the blob
+                const imageUrl = URL.createObjectURL(imageBlob);
+                // Update the src attribute of the <img> tag
+                document.getElementById("uploadedImage").src = imageUrl;
+            })
+            .catch(error => {
+                console.error("Error fetching image:", error);
+            });
+    </script>
+</body>
+</html>
